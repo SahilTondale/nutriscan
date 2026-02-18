@@ -1,0 +1,45 @@
+Version-1:
+    1. Improve design, functionality of home, login, logout, upload page. Add more good looks and features in it.
+    2. Image which is uploaded by user in upload.html till upload completes shows loading bar, after upload it show image preview at below.
+    3. Also saved the user uploaded images in database and able to show in analysis history page and in full analysis page as well.
+    4. when click on the any items of navbar should show good looks and shows the any thing like underline or any design when click on it.
+    5. The upload page improve design, logics , view in such way it looks good and professional.
+    6. The formatting after result comes from llm is not formatted in good format in upload page improve it.
+    7. When user login successfully if it clicks on get started, login button it should be forwarded on upload url only.
+
+Version-2:
+    1. When i upload the image successfully then progress bar must be full.
+    2. in history.html page, each item of analysis shows the image preview at its right side.
+    3. analysis_detail.html page should show  good formatting and show image in right side panel.
+    4. make navbar.html design more impressive , good.
+    5. in upload.html page (/upload) shows history bar at top to see history in one left panel which has functionality to open and close as well.whenever new upload happens, it will show in that bar
+
+Version-3:
+    1. The background of navbar is weired in analysis_detail.html page. it need to fix.
+    2. when hover on logo in navbar, it shows scalling and background effect need to remove.
+    3. when image upload completes it shows the loading bar 100% but when completes it back to 0% which is wrong. Till user upload new image it should be 100%.
+    4. the images not seen/visible in history.html and analysis_detail.html page
+    5. improve the design, view of edit.html file.
+
+Version-4:
+    1. improve the design, view of register page and login page
+    2. Add more content in home.html page
+    3. improve the design,view of form.html and edit.html file
+    4. issue of nabvar background looks whitish in analysis_detail.html page.
+
+Version-5:
+    1. wanted the navbar in register and login page
+    2. improve the design,view of edit.html file.
+
+Version-6:
+    1. in register and login screen, dont use the navbar.html file for navbar, use their custom one which is contain button of login, register only.
+
+Version-7:
+    1. use local storage caching for product category, image uploaded and preview as well in upload.html page.
+    2. analysis.image in history.html page and img in upload.html also not visible in recent analyses section. fix it.
+    3. my docker-image taking much size about 3.52GB space. can you optimise it more efficient way possible .
+
+Version-8:
+    1. Choosen file in upload.html is not cache locally. in choose file section shows no file Choosen when i came back from history page. i see product preview and category is stored in local storage which is good.
+    2. in history page and analysis_detail page dont see the images. solve this issue.
+    3. my docker-image taking much size about 3.52GB space. can you optimise it more efficient way possible .you have to modify my Dockerfile which exist in project.

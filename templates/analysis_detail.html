@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Detail - {{ analysis.category }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Remove conflicting body styles that affect navbar */
+        .page-content {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: calc(100vh - 80px);
+            padding-top: 0;
+        }
+
+        .analysis-content h1,
+        .analysis-content h2,
+        .analysis-content h3 {
+            margin: 1.5rem 0 0.75rem 0;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .analysis-content h1 {
+            font-size: 1.75rem;
+        }
+
+        .analysis-content h2 {
+            font-size: 1.5rem;
+        }
+
+        .analysis-content h3 {
+            font-size: 1.25rem;
+        }
+
+        .analysis-content ul,
+        .analysis-content ol {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .analysis-content li {
+            margin: 0.5rem 0;
+            line-height: 1.7;
+        }
+
+        .analysis-content strong {
+            color: #1f2937;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+
+        .analysis-content p {
+            margin: 0.75rem 0;
+            line-height: 1.7;
+            color: #374151;
+        }
+
+        .sticky-image {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .analysis-image {
+            width: 100%;
+            height: 16rem;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .content-container {
+            flex: 1; /* Take up remaining space */
+        }
+    </style>
+</head>
+
+<body class="flex-col min-h-screen">
+
+    <div class="sticky top-0 z-50 bg-gradient-to-r from-blue-900 to-blue-900 shadow-lg">
+        {% include 'navbar.html' %}
+    </div>
+    <!-- Main Content Container -->
+    <div class="page-content">
+        <div class="container mx-auto mt-4 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header Section -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900 flex items-center">
+                                <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-microscope text-blue-600 text-xl"></i>
+                                </div>
+                                Analysis: {{ analysis.category }}
+                            </h1>
+                            <p class="text-gray-600 mt-2 flex items-center">
+                                <i class="fas fa-calendar-alt mr-2 text-blue-500"></i>
+                                Analyzed on {{ analysis.timestamp|date:"F j, Y" }} at {{ analysis.timestamp|date:"g:i a" }}
+                            </p>
+                        </div>
+                        <a href="{% url 'history' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-300 flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Back to History
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Main Analysis Content -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-lg shadow-md p-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-green-100 p-2 rounded-lg mr-3">
+                                    <i class="fas fa-chart-line text-green-600"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold text-gray-900">Detailed Analysis Results</h2>
+                            </div>
+                            <div id="analysisResult" class="analysis-content prose prose-lg max-w-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar -->
+                    <div class="lg:col-span-1">
+                        <div class="sticky-image space-y-6">
+                            <!-- Image Panel -->
+                            <div class="bg-white rounded-lg shadow-md p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                    <i class="fas fa-image mr-2 text-purple-600"></i>
+                                    Analyzed Image
+                                </h3>
+                                {% if analysis.image %}
+                                <div class="relative group">
+                                    <img src="{{ analysis.image.url }}" alt="Analysis Image" 
+                                        class="analysis-image hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                                        onclick="openImageModal()" 
+                                        onerror="this.parentElement.innerHTML='<div class=\'w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center\'><div class=\'text-center\'><i class=\'fas fa-exclamation-triangle text-4xl text-gray-400 mb-3\'></i><p class=\'text-gray-500 font-medium\'>Image not found</p></div></div>'">
+                                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                        <div class="bg-white bg-opacity-90 px-3 py-2 rounded-full">
+                                            <i class="fas fa-expand text-gray-800"></i>
+                                            <span class="text-sm font-medium text-gray-800 ml-2">View Full Size</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
+                                    <div class="text-center">
+                                        <i class="fas fa-image text-4xl text-gray-400 mb-3"></i>
+                                        <p class="text-gray-500 font-medium">No image available</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Quick Stats Panel -->
+                            <div class="bg-white rounded-lg shadow-md p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                    <i class="fas fa-info-circle mr-2 text-blue-600"></i>
+                                    Quick Info
+                                </h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-gray-600">Category:</span>
+                                        <span class="font-medium text-gray-900 bg-blue-100 px-2 py-1 rounded">{{ analysis.category }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-gray-600">Date:</span>
+                                        <span class="font-medium text-gray-900">{{ analysis.timestamp|date:"M j, Y" }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2">
+                                        <span class="text-gray-600">Time:</span>
+                                        <span class="font-medium text-gray-900">{{ analysis.timestamp|date:"g:i a" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Actions Panel -->
+                            <div class="bg-white rounded-lg shadow-md p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                    <i class="fas fa-tools mr-2 text-orange-600"></i>
+                                    Actions
+                                </h3>
+                                <div class="space-y-3">
+                                    <a href="{% url 'upload' %}" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                                        <i class="fas fa-plus mr-2"></i>
+                                        New Analysis
+                                    </a>
+                                    <button onclick="downloadAnalysis()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                                        <i class="fas fa-download mr-2"></i>
+                                        Export Results
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+        <div class="relative max-w-4xl max-h-full">
+            <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            {% if analysis.image %}
+            <img src="{{ analysis.image.url }}" alt="Analysis Image" class="max-w-full max-h-full object-contain rounded-lg"
+                onerror="this.parentElement.innerHTML='<div class=\'text-center text-white\'><i class=\'fas fa-exclamation-triangle text-6xl mb-4\'></i><p class=\'text-xl\'>Image could not be loaded</p></div>'">
+            {% endif %}
+        </div>
+    </div>
+
+     {% include 'footer.html' %}
+
+    <script>
+        function parseMarkdown(markdown) {
+            // Enhanced markdown parsing with better styling
+            markdown = markdown.replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold text-gray-800 mt-6 mb-3 border-l-4 border-blue-500 pl-4 bg-blue-50 py-2 rounded-r-lg"><i class="fas fa-angle-right mr-2 text-blue-500"></i>$1</h3>');
+            markdown = markdown.replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4 border-l-4 border-green-500 pl-4 bg-green-50 py-3 rounded-r-lg"><i class="fas fa-chevron-right mr-2 text-green-500"></i>$1</h2>');
+            markdown = markdown.replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-gray-800 mt-8 mb-5 border-l-4 border-purple-500 pl-4 bg-purple-50 py-3 rounded-r-lg">$1</h1>');
+
+            // Enhanced bold text
+            markdown = markdown.replace(/\*\*(.*?)\*\*/gim, '<strong class="font-semibold text-gray-900 bg-yellow-100 px-2 py-1 rounded">$1</strong>');
+
+            // Enhanced list items
+            markdown = markdown.replace(/^\s*[\*\-\+]\s(.*$)/gim, '<li class="flex items-start mb-3 bg-gray-50 p-3 rounded-lg"><i class="fas fa-check-circle text-green-500 mt-1 mr-3 flex-shrink-0"></i><span>$1</span></li>');
+
+            // Wrap lists
+            markdown = markdown.replace(/(<li.*?<\/li>\s*)+/gim, '<ul class="space-y-2 mb-6">$&</ul>');
+
+            // Enhanced paragraphs
+            markdown = markdown.replace(/\n\n/g, '</p><p class="mb-4 text-gray-700 leading-relaxed">');
+            markdown = '<p class="mb-4 text-gray-700 leading-relaxed">' + markdown + '</p>';
+
+            // Enhanced quotes
+            markdown = markdown.replace(/'(.*?)'/gim, '<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-medium border border-blue-200">$1</span>');
+
+            // Warning symbols
+            markdown = markdown.replace(/⚠️/g, '<i class="fas fa-exclamation-triangle text-yellow-500 text-lg"></i>');
+            markdown = markdown.replace(/❗/g, '<i class="fas fa-exclamation-circle text-red-500 text-lg"></i>');
+
+            return markdown.trim();
+        }
+
+        function openImageModal() {
+            document.getElementById('imageModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function downloadAnalysis() {
+            const analysisText = document.getElementById('analysisResult').innerText;
+            const blob = new Blob([analysisText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `analysis_{{ analysis.category }}_{{ analysis.timestamp|date:"Y-m-d" }}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const analysisResultElement = document.getElementById("analysisResult");
+            const rawResult = `{{ analysis.result|escapejs }}`;
+            const parsedResult = parseMarkdown(rawResult);
+            analysisResultElement.innerHTML = parsedResult;
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}Medical History{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: 100vh;
+  }
+  
+  .form-container {
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .medical-icon {
+    color: #475569;
+  }
+  
+  .input-focus {
+    transition: all 0.3s ease;
+  }
+  
+  .input-focus:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .form-control::placeholder {
+    color: #9CA3AF;
+  }
+  
+  .form-control:focus::placeholder {
+    opacity: 1;
+  }
+</style>
+
+<div class="min-h-screen flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl w-full space-y-8">
+    <!-- Header Section -->
+    <div class="text-center">
+      <div class="mx-auto h-20 w-20 bg-white rounded-full flex items-center justify-center shadow-lg mb-6 border border-gray-200">
+        <i class="fas fa-clipboard-list text-3xl medical-icon"></i>
+      </div>
+      <h1 class="text-4xl font-bold text-gray-800 mb-3">
+        Medical History
+      </h1>
+      <p class="text-lg text-gray-600 max-w-xl mx-auto">
+        Share your medical information for personalized ingredient analysis
+      </p>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container rounded-xl p-8 md:p-10 relative">
+      <!-- Skip Button -->
+      <div class="flex justify-end mb-6">
+        <a href="{% url 'upload' %}" 
+           class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 hover:shadow-md transition-all duration-300">
+          <i class="fas fa-forward mr-2"></i>
+          Skip for now
+        </a>
+      </div>
+
+      <!-- Form -->
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="space-y-6">
+          {% for field in form %}
+            <div class="space-y-3">
+              <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 flex items-center">
+                {% if 'allergies' in field.name %}
+                  <i class="fas fa-exclamation-triangle text-amber-500 mr-2"></i>
+                {% elif 'conditions' in field.name %}
+                  <i class="fas fa-heartbeat text-rose-500 mr-2"></i>
+                {% elif 'medications' in field.name %}
+                  <i class="fas fa-pills text-sky-500 mr-2"></i>
+                {% else %}
+                  <i class="fas fa-info-circle text-gray-500 mr-2"></i>
+                {% endif %}
+                {{ field.label }}
+              </label>
+              
+              <div class="relative">
+                {% if field.field.widget.input_type == 'textarea' %}
+                  <textarea name="{{ field.name }}" id="{{ field.id_for_label }}" 
+                           class="input-focus form-control w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
+                           placeholder="{{ field.field.widget.attrs.placeholder|default:'' }}" rows="4">{{ field.value|default:'' }}</textarea>
+                {% else %}
+                  <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                         name="{{ field.name }}" 
+                         id="{{ field.id_for_label }}" 
+                         value="{{ field.value|default:'' }}"
+                         class="input-focus form-control w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
+                         placeholder="{{ field.field.widget.attrs.placeholder|default:'' }}">
+                {% endif %}
+                {% if field.help_text %}
+                  <p class="mt-2 text-xs text-gray-500 flex items-center">
+                    <i class="fas fa-lightbulb mr-1"></i>
+                    {{ field.help_text }}
+                  </p>
+                {% endif %}
+              </div>
+              
+              {% if field.errors %}
+                <div class="text-red-600 text-sm mt-1">
+                  {% for error in field.errors %}
+                    <p class="flex items-center">
+                      <i class="fas fa-exclamation-circle mr-1"></i>
+                      {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-6">
+          <button type="submit" 
+                  class="btn-primary w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-lg shadow-lg text-lg font-semibold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            <i class="fas fa-save mr-3"></i>
+            Save Medical History
+          </button>
+        </div>
+      </form>
+
+      <!-- Security Notice -->
+      <div class="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <div class="flex items-center justify-center text-sm text-gray-600">
+          <i class="fas fa-lock text-green-600 mr-2"></i>
+          <span class="font-medium">Your medical information is encrypted and secure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.form-control').forEach(input => {
+    input.addEventListener('input', function() {
+      if (this.value === '') {
+        this.classList.add('placeholder-visible');
+      } else {
+        this.classList.remove('placeholder-visible');
+      }
+    });
+  });
+</script>
+
+{% endblock %}

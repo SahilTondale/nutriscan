@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'ingredient_analysis_app/logo.png' %}" type="image/png">
+    <link rel="shortcut icon" href="{% static 'ingredient_analysis_app/logo.png' %}" type="image/png">
+    <title>{% block title %}Default Title{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .content-container {
+            flex: 1; /* Take up remaining space */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    {% include 'navbar.html' %}
+    <main class="content-container flex flex-col justify-center items-center">
+        {% block content %}
+        
+        {% endblock %}
+    </main>
+    {% include 'footer.html' %}
+</body>
+</html>
