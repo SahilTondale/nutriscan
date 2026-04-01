@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  ingredient-analyzer:
-    image: ingredient-analyzer
+  nutriscan-app:
+    image: nutriscan-app
     build:
       context: .
       dockerfile: Dockerfile

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class IngredientAnalysisAppConfig(AppConfig):
+class NutriScanAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'NutriScan_app'
