@@ -1,4 +1,4 @@
-# ingredient_analysis_app/models.py
+# NutriScan_app/models.py
 
 from django.db import models
 from django.contrib.auth.models import User

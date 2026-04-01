@@ -1,5 +1,5 @@
 """
-URL configuration for ingredient_analysis project.
+URL configuration for NutriScan project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -21,14 +21,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.views.static import serve
-# import ingredient_analysis_app 
+# import NutriScan_app 
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('medical_history.urls')),
-    path('',include('ingredient_analysis_app.urls')),
+    path('',include('NutriScan_app.urls')),
     
     # Explicitly serve media files in all environments
     re_path(r'^media/(?P<path>.*)$', serve, {

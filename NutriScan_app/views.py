@@ -88,7 +88,7 @@ def home(request):
 
 @login_required
 def upload(request):
-    return render(request, "ingredient_analysis_app/upload.html")
+    return render(request, "NutriScan_app/upload.html")
 
 class OCRReader:
     _instance = None
